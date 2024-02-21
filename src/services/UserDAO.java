@@ -7,12 +7,13 @@ import java.sql.PreparedStatement;
 import model.User;
 import services.JDBCConnection;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import model.UserRole;
 
 public class UserDAO {
     private Connection connection;
     private JDBCConnection jdbccon;
-    private PreparedStatement psuser, pscount;
+    private PreparedStatement psuser, pscount, pslogin;
     private String sql;
     private String countUsers;
     private ResultSet rs;
@@ -87,6 +88,39 @@ public class UserDAO {
         }
         
         return count;
+    }
+    
+    
+      public void authenticateUser(User user){
+        
+        try {
+            
+            sql = "SELECT * FROM users WHERE username=? AND password=?";
+            
+            try {
+                pslogin = connection.prepareStatement(sql);
+                
+                pslogin.setString(1, user.getuserName());
+                pslogin.setString(2, user.getPassword());
+                
+                rs = pslogin.executeQuery();
+                
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(null, "Signed up");
+                } else{
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+                
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 }
