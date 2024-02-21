@@ -96,7 +96,6 @@ public class Login extends javax.swing.JFrame {
 
         User newUser = new User();
      
-
         String username = userName.getText();
         String pass = password.getText();
         
