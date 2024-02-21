@@ -2,6 +2,7 @@
 package services;
 
 
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import model.User;
@@ -34,8 +35,13 @@ public class UserDAO {
                 
                psuser = connection.prepareStatement(sql);
                 
+               String salt = generateSalt();
+               
+               String saltedPassword = user.getPassword() + salt;
+               
+               
                 psuser.setString(1, user.getuserName());
-                psuser.setString(2, user.getPassword());
+                psuser.setString(2, saltedPassword);
                 
                 if (CountExistingUser() == 0) {
                     psuser.setString(3, UserRole.ADMIN.name());
@@ -61,6 +67,23 @@ public class UserDAO {
         }
     }
     
+    
+    private String generateSalt(){
+        
+        //Use a strong ranmdom number generator
+        SecureRandom random = new SecureRandom();
+        byte[] saltBytes = new byte[16];
+        random.nextBytes(saltBytes);
+        
+        //convert the byte array to a hexadecimal string
+        StringBuilder salt = new StringBuilder();
+        
+        for (byte b : saltBytes) {
+            salt.append(String.format("%02x", b));
+        }
+        
+        return salt.toString();
+    }
     
     private int CountExistingUser(){
         int count = 0;
