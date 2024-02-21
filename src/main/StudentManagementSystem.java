@@ -1,6 +1,7 @@
 
 package main;
 
+import controller.Signup;
 import java.sql.Connection;
 import services.JDBCConnection;
 
@@ -27,7 +28,7 @@ public class StudentManagementSystem {
 
     public static void main(String[] args) {
        
-        Login login = new Login();
+        Signup login = new Signup();
         login.setVisible(true);
         
         jdbcConnection();
